@@ -6,7 +6,7 @@ uvicorn main:app --port 5000
 3. reload server without restart
 uvicorn main:app --reload
 
-4. method and url
+4. method and url creation
 
 5. url paramter
 
@@ -17,4 +17,24 @@ uvicorn main:app --reload
 8. Enum with url paramter
 
 9. query parameter
+
+10. Use of BaseModel
+
+11. FastAPI - Query Class
+
+12. other paramter - example, httpURL
+
+13. Nested BaseModel
+
+13. extra datatype - UUID, datetime, timedelta, time, 
+
+14. cookies and headers
+
+15. response - response_model
+
+16. status codes
+
+17. request files 
+
+18. Error Handling
 
