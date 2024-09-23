@@ -1,99 +1,49 @@
-from fastapi import FastAPI
-from enum import Enum
-# from typing import Optional
+# main.py
+from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.orm import Session
+from . import models, schemas
+from .database import engine, Base, get_db
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# @app.get("/")
-# async def root():
-#     return {'message': 'hello my world'}
+# In-memory database to store items (for demonstration)
+items_db = []
 
+@app.post("/items/", response_model=schemas.Item)
+def create_item(item: schemas.ItemCreate, db: Session = Depends(get_db)):
+    """
+    Route to create an item.
+    - item: Data required to create an item (name, description, price).
+    - db: Database session for interacting with the database.
+    """
+    db_item = models.Item(name=item.name, description=item.description, price=item.price)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)  # Refresh the instance to get the ID
+    return db_item
 
-@app.get("/")
-# @app.get("/", description="this is base route")
-# @app.get("/", description="this is base route", deprecated=True)
-async def root():
-    return {'message': 'hello my world'}
+@app.get("/items/{item_id}", response_model=schemas.Item)
+def read_item(item_id: int, db: Session = Depends(get_db)):
+    """
+    Route to read an item by its ID.
+    - item_id: The ID of the item to retrieve.
+    - db: Database session for querying the database.
+    """
+    db_item = db.query(models.Item).filter(models.Item.id == item_id).first()
+    if db_item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return db_item
 
-
-# @app.post("/")
-# async def post():
-#     return {'message': 'hello my post world'}
-
-
-# @app.put("/{id}")
-# async def put():
-#     return {'message': "id"}
-
-
-# @app.get("/users")
-# async def list_users():
-#     return {'message': 'users list'}
-
-
-# @app.get("/users/{user_id}")
-# async def get_user(user_id: int):
-#     return {'user_id': user_id}
-
-
-# @app.get("/users/{user_id}")
-# async def get_user(user_id):
-#     return {'user_id': user_id}
-
-
-# @app.get("/users/me")
-# async def get_current_me():
-#     return {'user_id': "this is me"}
-
-
-# @app.get("/users/{user_id}")
-# async def list_users(user_id: int):
-#     return {'user_id': user_id}
-
-
-# class FoodEnum(str, Enum):
-#     fruits = 'fruits'
-#     vegetables = 'vegetables'
-#     dairy = 'dairy'
-
-# @app.get("/foods/{food_name}")
-# async def get_food(food_name: FoodEnum):
-#     if food_name == FoodEnum.vegetables:
-#         return {"food_name": "this is vegetable category"}
-
-#     if food_name == FoodEnum.fruits:
-#         return {"food_name": "this is fruit category"}
-
-#     if food_name == FoodEnum.dairy:
-#         return {"food_name": "this is dairy category"}
-
-#     return {"food_name": "not able to process"}
-
-
-# @app.get("/items")
-# async def list_items(query):
-#     return {"data": query}
-
-
-# # @app.get("/items/{item_id}")
-# # async def get_item(item_id, query: int = 10):
-# #     if query:
-# #         return {"item_id": item_id, "data": query}
-
-# #     return {"data": query}
-
-
-# @app.get("/items/{item_id}")
-# async def get_item(item_id, query= None):
-#     if query:
-#         return {"item_id": item_id, "data": query}
-
-#     return {"item_id": item_id}
-
-
-# @app.get("/items/{item_id}/type/{user_id}")
-# async def get_item(user_id, item_id, query= None):
-#     if query:
-#         return {"item_id": item_id, "user_id": user_id, "data": query}
-
-#     return {"item_id": item_id, "user_id": user_id}
+@app.get("/items/", response_model=list[schemas.Item])
+def read_items(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    """
+    Route to read a list of items.
+    - skip: Number of records to skip for pagination.
+    - limit: Maximum number of records to return.
+    - db: Database session for querying the database.
+    """
+    items = db.query(models.Item).offset(skip).limit(limit).all()
+    return items
