@@ -1,0 +1,20 @@
+1. uvicorn main:app
+
+2. change port 
+uvicorn main:app --port 5000
+
+3. reload server without restart
+uvicorn main:app --reload
+
+4. method and url
+
+5. url paramter
+
+6. url parameter with data type - pydantic(typecasting)
+
+7. routing - url ordering 
+
+8. Enum with url paramter
+
+9. query parameter
+
