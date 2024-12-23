@@ -100,48 +100,48 @@ app = FastAPI()
 #     return {"item_id": item_id, "user_id": user_id}
 
 
-class Item(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-    tax: float | None = None
+# class Item(BaseModel):
+#     name: str
+#     description: str | None = None
+#     price: float
+#     tax: float | None = None
 
-class Employee(BaseModel):
-    username: str
-    email: str | None = None
+# class Employee(BaseModel):
+#     username: str
+#     email: str | None = None
+
+# # @app.post("/items/create")
+# # async def create_item(item: Item):
+# #     return item
+
 
 # @app.post("/items/create")
 # async def create_item(item: Item):
-#     return item
+#     item_dict =  item.dict()
+#     if item.tax:
+#         price_with_tax = item.price + item.tax
+#         item_dict.update({"itema_with_tax": price_with_tax})
+
+#     return item_dict
 
 
-@app.post("/items/create")
-async def create_item(item: Item):
-    item_dict =  item.dict()
-    if item.tax:
-        price_with_tax = item.price + item.tax
-        item_dict.update({"itema_with_tax": price_with_tax})
-
-    return item_dict
+# @app.put("/items/{item_id}")
+# async def update_item(item_id: int, item: Item):
+#     return {"item_id": item_id, **item.dict()}
 
 
-@app.put("/items/{item_id}")
-async def update_item(item_id: int, item: Item):
-    return {"item_id": item_id, **item.dict()}
+# @app.get("/employees/")
+# async def read_items(q: str | None = Query(None, min_length=3, max_length=10, alias="query", include_in_schema=False)):
+#     return {"q": q}
 
 
-@app.get("/employees/")
-async def read_items(q: str | None = Query(None, min_length=3, max_length=10, alias="query", include_in_schema=False)):
-    return {"q": q}
+# @app.get("/employees/{emp_id}")
+# async def read_items(*, emp_id: int = Path(..., title="employee id", ge=10, le=100), q: str | None = Query(None, min_length=3, max_length=10, alias="query", include_in_schema=False)):
+#     return {"q": q}
 
 
-@app.get("/employees/{emp_id}")
-async def read_items(*, emp_id: int = Path(..., title="employee id", ge=10, le=100), q: str | None = Query(None, min_length=3, max_length=10, alias="query", include_in_schema=False)):
-    return {"q": q}
-
-
-@app.get("/employees/{emp_id}")
-async def read_items(*, emp_id: int = Path(..., title="employee id", ge=10, le=100), q: str | None = Query(None, min_length=3, max_length=10, alias="query", include_in_schema=False), emp: Employee | None, item: Item | None):
-    return {"q": q}
+# @app.get("/employees/{emp_id}")
+# async def read_items(*, emp_id: int = Path(..., title="employee id", ge=10, le=100), q: str | None = Query(None, min_length=3, max_length=10, alias="query", include_in_schema=False), emp: Employee | None, item: Item | None):
+#     return {"q": q}
 
 

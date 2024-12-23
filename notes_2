@@ -1,0 +1,37 @@
+
+
+# 1.  for installing fast API , ASGI server, sqllite db
+    # pip install fastapi uvicorn sqlalchemy databases
+
+
+# driver for - asyncpg for PostgreSQL and aiomysql for MySQL
+
+
+
+# - alembic - for migration
+
+# command - 
+# alembic init <folder_name> - for creating folder for migrations
+# alembic revision -m <message> - creating new revision of the env
+# alembic upgrade <revision #> - run our upgrade migration to our db
+# alembic downgrade -1 - downgrade migration
+
+
+
+# - passlib and python-jose for authentication
+
+
+
+
+
+
+
+- routers
+
+- models
+
+- database
+
+- schemas
+
+- alembic

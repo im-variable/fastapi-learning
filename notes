@@ -38,3 +38,13 @@ uvicorn main:app --reload
 
 18. Error Handling
 
+
+
+
+
+
+
+--------------------------------------
+
+roll back from db
+triggers in fastapi - orm
